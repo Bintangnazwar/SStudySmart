@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudySmart - Kurikulum Terintegrasi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root{
+      --bg:#09090b;
+      --surface:#121214;
+      --surface-muted:#18181b;
+      --border:rgba(255,255,255,0.08);
+      --border-glow:rgba(255,255,255,0.18);
+      --primary:#ffffff;
+      --text-main:#f4f4f5;
+      --text-muted:#a1a1aa;
+      --accent:#3b82f6;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Plus Jakarta Sans',sans-serif;
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--text-main);
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:'';
+      position:fixed;
+      width:100%;
+      height:100%;
+      background-image:radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size:24px 24px;
+      z-index:-2;
+    }
+
+    .bg-glow{
+      position:fixed;
+      width:700px;
+      height:400px;
+      background:radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%);
+      top:-100px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:-1;
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      backdrop-filter:blur(16px);
+      background:rgba(9,9,11,0.8);
+      border-bottom:1px solid var(--border);
+      z-index:1000;
+    }
+
+    .navbar{
+      max-width:1200px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:20px;
+    }
+
+    .logo{
+      font-size:22px;
+      font-weight:700;
+      color:var(--primary);
+    }
+
+    .nav-links{
+      display:flex;
+      gap:30px;
+      list-style:none;
+    }
+
+    .nav-links a{
+      text-decoration:none;
+      color:var(--text-muted);
+      transition:0.3s;
+      font-size:14px;
+    }
+
+    .nav-links a:hover{
+      color:var(--primary);
+    }
+
+    .hero{
+      max-width:1200px;
+      margin:auto;
+      padding:120px 20px 80px;
+      text-align:center;
+    }
+
+    .hero h1{
+      font-size:64px;
+      line-height:1.1;
+      margin-bottom:25px;
+      font-weight:800;
+      letter-spacing:-2px;
+      background:linear-gradient(180deg,#fff,#9ca3af);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .hero p{
+      color:var(--text-muted);
+      max-width:700px;
+      margin:auto;
+      line-height:1.8;
+      font-size:18px;
+    }
+
+    .hero button{
+      margin-top:40px;
+      padding:16px 32px;
+      border:none;
+      border-radius:10px;
+      background:#fff;
+      color:#000;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .hero button:hover{
+      transform:translateY(-3px);
+      box-shadow:0 20px 40px rgba(255,255,255,0.1);
+    }
+
+    section{
+      max-width:1200px;
+      margin:auto;
+      padding:100px 20px;
+    }
+
+    .section-header{
+      text-align:center;
+      margin-bottom:60px;
+    }
+
+    .section-header span{
+      color:var(--accent);
+      text-transform:uppercase;
+      font-size:13px;
+      letter-spacing:2px;
+      font-weight:700;
+    }
+
+    .section-header h2{
+      font-size:42px;
+      margin-top:12px;
+      font-weight:800;
+      letter-spacing:-1px;
+    }
+
+    .curriculum-wrapper{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:30px;
+    }
+
+    .curriculum-sidebar{
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+    }
+
+    .curriculum-tab{
+      background:var(--surface);
+      border:1px solid var(--border);
+      padding:20px;
+      border-radius:16px;
+      color:var(--text-muted);
+      font-weight:600;
+      cursor:pointer;
+      transition:0.3s;
+      text-align:left;
+    }
+
+    .curriculum-tab:hover{
+      border-color:var(--border-glow);
+      color:var(--primary);
+      transform:translateY(-2px);
+    }
+
+    .curriculum-tab.active{
+      background:rgba(59,130,246,0.1);
+      border-color:rgba(59,130,246,0.4);
+      color:#fff;
+    }
+
+    .curriculum-content{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:40px;
+    }
+
+    .curriculum-panel{
+      display:none;
+      animation:fade 0.4s ease;
+    }
+
+    .curriculum-panel.active{
+      display:block;
+    }
+
+    .curriculum-panel h3{
+      font-size:36px;
+      margin-bottom:15px;
+    }
+
+    .curriculum-panel p{
+      color:var(--text-muted);
+      line-height:1.8;
+      margin-bottom:40px;
+    }
+
+    .module-list{
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+    }
+
+    .module-card{
+      display:flex;
+      gap:20px;
+      padding:25px;
+      border-radius:18px;
+      background:var(--surface-muted);
+      border:1px solid var(--border);
+      transition:0.3s;
+    }
+
+    .module-card:hover{
+      transform:translateY(-4px);
+      border-color:var(--border-glow);
+    }
+
+    .module-number{
+      width:55px;
+      height:55px;
+      border-radius:14px;
+      background:rgba(59,130,246,0.1);
+      border:1px solid rgba(59,130,246,0.3);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-weight:700;
+      color:#60a5fa;
+      flex-shrink:0;
+    }
+
+    .module-info h4{
+      margin-bottom:8px;
+      font-size:20px;
+    }
+
+    .module-info p{
+      margin:0;
+      font-size:14px;
+    }
+
+    footer{
+      border-top:1px solid var(--border);
+      padding:40px 20px;
+      text-align:center;
+      color:var(--text-muted);
+      margin-top:80px;
+    }
+
+    @keyframes fade{
+      from{
+        opacity:0;
+        transform:translateY(10px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @media(max-width:900px){
+
+      .hero h1{
+        font-size:42px;
+      }
+
+      .curriculum-wrapper{
+        grid-template-columns:1fr;
+      }
+
+      .nav-links{
+        display:none;
+      }
+
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+
+  <header>
+    <nav class="navbar">
+
+      <div class="logo">
+        StudySmart
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Curriculum</a></li>
+        <li><a href="#">Platform</a></li>
+      </ul>
+
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero">
+
+      <h1>
+        Integrated Learning Curriculum
+      </h1>
+
+      <p>
+        StudySmart menghadirkan kurikulum teknologi modern
+        berbasis industri global untuk membentuk generasi
+        digital masa depan yang kompetitif dan produktif.
+      </p>
+
+      <button id="startBtn">
+        Start Learning
+      </button>
+
+    </section>
+
+    <section>
+
+      <div class="section-header">
+        <span>Curriculum System</span>
+        <h2>Kurikulum Terintegrasi</h2>
+      </div>
+
+      <div class="curriculum-wrapper">
+
+        <div class="curriculum-sidebar">
+
+          <button class="curriculum-tab active" data-target="frontend">
+            Frontend Engineering
+          </button>
+
+          <button class="curriculum-tab" data-target="backend">
+            Backend Development
+          </button>
+
+          <button class="curriculum-tab" data-target="datascience">
+            Data Science
+          </button>
+
+          <button class="curriculum-tab" data-target="ai">
+            Artificial Intelligence
+          </button>
+
+          <button class="curriculum-tab" data-target="cloud">
+            Cloud Computing
+          </button>
+
+        </div>
+
+        <div class="curriculum-content">
+
+          <!-- Frontend -->
+          <div class="curriculum-panel active" id="frontend">
+
+            <h3>Frontend Engineering</h3>
+
+            <p>
+              Pelajari pengembangan antarmuka modern
+              menggunakan teknologi web terbaru.
+            </p>
+
+            <div class="module-list">
+
+              <div class="module-card">
+                <div class="module-number">01</div>
+
+                <div class="module-info">
+                  <h4>HTML5 & Semantic</h4>
+                  <p>Struktur website modern dan SEO friendly.</p>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-number">02</div>
+
+                <div class="module-info">
+                  <h4>CSS3 & Responsive</h4>
+                  <p>Flexbox, Grid, animation dan UI modern.</p>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-number">03</div>
+
+                <div class="module-info">
+                  <h4>JavaScript ES6+</h4>
+                  <p>DOM manipulation dan API integration.</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Backend -->
+          <div class="curriculum-panel" id="backend">
+
+            <h3>Backend Development</h3>
+
+            <p>
+              Bangun sistem server scalable menggunakan framework modern.
+            </p>
+
+            <div class="module-list">
+
+              <div class="module-card">
+                <div class="module-number">01</div>
+
+                <div class="module-info">
+                  <h4>Laravel Framework</h4>
+                  <p>MVC architecture dan authentication.</p>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-number">02</div>
+
+                <div class="module-info">
+                  <h4>REST API</h4>
+                  <p>Membangun API modern dan secure.</p>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-number">03</div>
+
+                <div class="module-info">
+                  <h4>Database System</h4>
+                  <p>MySQL relational database architecture.</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Data Science -->
+          <div class="curriculum-panel" id="datascience">
+
+            <h3>Data Science</h3>
+
+            <p>
+              Analisis data modern menggunakan Python dan machine learning.
+            </p>
+
+            <div class="module-list">
+
+              <div class="module-card">
+                <div class="module-number">01</div>
+
+                <div class="module-info">
+                  <h4>Python Analytics</h4>
+                  <p>Pandas, NumPy dan data processing.</p>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-number">02</div>
+
+                <div class="module-info">
+                  <h4>Machine Learning</h4>
+                  <p>Classification dan predictive analysis.</p>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-number">03</div>
+
+                <div class="module-info">
+                  <h4>Data Visualization</h4>
+                  <p>Dashboard dan visual storytelling.</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- AI -->
+          <div class="curriculum-panel" id="ai">
+
+            <h3>Artificial Intelligence</h3>
+
+            <p>
+              Bangun sistem AI modern dan automasi berbasis LLM.
+            </p>
+
+            <div class="module-list">
+
+              <div class="module-card">
+                <div class="module-number">01</div>
+
+                <div class="module-info">
+                  <h4>Prompt Engineering</h4>
+                  <p>Optimasi AI workflow dan automation.</p>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-number">02</div>
+
+                <div class="module-info">
+                  <h4>Neural Network</h4>
+                  <p>Deep learning dan model training.</p>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-number">03</div>
+
+                <div class="module-info">
+                  <h4>LLM Integration</h4>
+                  <p>Integrasi AI ke aplikasi modern.</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Cloud -->
+          <div class="curriculum-panel" id="cloud">
+
+            <h3>Cloud Computing</h3>
+
+            <p>
+              Pelajari deployment dan infrastruktur cloud modern.
+            </p>
+
+            <div class="module-list">
+
+              <div class="module-card">
+                <div class="module-number">01</div>
+
+                <div class="module-info">
+                  <h4>Linux Server</h4>
+                  <p>Server administration dan shell system.</p>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-number">02</div>
+
+                <div class="module-info">
+                  <h4>Docker Container</h4>
+                  <p>Containerization deployment modern.</p>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-number">03</div>
+
+                <div class="module-info">
+                  <h4>CI/CD Pipeline</h4>
+                  <p>Automated deployment workflow.</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 StudySmart Inc. All rights reserved.
+  </footer>
+
+  <script>
+
+    const tabs = document.querySelectorAll(".curriculum-tab");
+    const panels = document.querySelectorAll(".curriculum-panel");
+
+    tabs.forEach(tab => {
+
+      tab.addEventListener("click", () => {
+
+        tabs.forEach(btn => btn.classList.remove("active"));
+        panels.forEach(panel => panel.classList.remove("active"));
+
+        tab.classList.add("active");
+
+        const target = tab.getAttribute("data-target");
+
+        document.getElementById(target).classList.add("active");
+
+      });
+
+    });
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+
+      alert("Welcome to StudySmart 🚀");
+
+    });
+
+  </script>
+
+</body>
+</html>

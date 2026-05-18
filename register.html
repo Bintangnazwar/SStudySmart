@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudySmart Register</title>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+
+        :root{
+            --bg:#09090b;
+            --surface:#121214;
+            --surface-muted:#18181b;
+            --border:rgba(255,255,255,0.08);
+            --border-glow:rgba(255,255,255,0.16);
+            --primary:#ffffff;
+            --text-main:#f4f4f5;
+            --text-muted:#a1a1aa;
+            --accent:#3b82f6;
+            --premium:#f59e0b;
+            --trial:#10b981;
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Plus Jakarta Sans', sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            background:var(--bg);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            overflow-x:hidden;
+            position:relative;
+            color:var(--text-main);
+            padding:40px 20px;
+        }
+
+        /* Background Grid */
+        body::before{
+            content:'';
+            position:absolute;
+            inset:0;
+            background-image:
+            radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size:24px 24px;
+            z-index:-3;
+        }
+
+        /* Glow */
+        .bg-glow{
+            position:absolute;
+            width:700px;
+            height:350px;
+            background:
+            radial-gradient(circle,
+            rgba(59,130,246,0.16) 0%,
+            transparent 70%);
+            top:-120px;
+            left:50%;
+            transform:translateX(-50%);
+            z-index:-2;
+        }
+
+        .bg-glow2{
+            position:absolute;
+            width:500px;
+            height:500px;
+            background:
+            radial-gradient(circle,
+            rgba(139,92,246,0.12) 0%,
+            transparent 70%);
+            bottom:-200px;
+            right:-120px;
+            z-index:-2;
+        }
+
+        .container{
+            width:100%;
+            max-width:520px;
+        }
+
+        .register-card{
+            background:rgba(18,18,20,0.78);
+            backdrop-filter:blur(18px);
+            border:1px solid var(--border);
+            border-radius:30px;
+            padding:44px 36px;
+            box-shadow:
+            0 30px 80px rgba(0,0,0,0.45);
+            animation:fadeUp .8s ease;
+        }
+
+        .logo{
+            text-align:center;
+            margin-bottom:34px;
+        }
+
+        .logo h1{
+            font-size:42px;
+            font-weight:800;
+            letter-spacing:-1px;
+            background:linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #a1a1aa 100%);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+
+        .logo p{
+            margin-top:10px;
+            color:var(--text-muted);
+            font-size:15px;
+        }
+
+        .input-group{
+            margin-bottom:22px;
+        }
+
+        .input-group label{
+            display:block;
+            margin-bottom:10px;
+            font-size:14px;
+            font-weight:600;
+        }
+
+        .input-group input{
+            width:100%;
+            padding:16px;
+            border-radius:14px;
+            border:1px solid var(--border);
+            background:rgba(255,255,255,0.03);
+            color:var(--text-main);
+            outline:none;
+            font-size:15px;
+            transition:0.3s ease;
+        }
+
+        .input-group input:focus{
+            border-color:rgba(59,130,246,0.5);
+            box-shadow:
+            0 0 0 4px rgba(59,130,246,0.08);
+        }
+
+        .input-group input::placeholder{
+            color:var(--text-muted);
+        }
+
+        /* PLAN */
+        .plan-title{
+            font-size:14px;
+            font-weight:600;
+            margin-bottom:14px;
+        }
+
+        .plan-container{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:16px;
+            margin-bottom:26px;
+        }
+
+        .plan-card{
+            border:1px solid var(--border);
+            border-radius:18px;
+            padding:20px;
+            cursor:pointer;
+            transition:0.3s ease;
+            background:rgba(255,255,255,0.02);
+        }
+
+        .plan-card:hover{
+            transform:translateY(-4px);
+            border-color:rgba(255,255,255,0.2);
+        }
+
+        .plan-card.active{
+            border-color:var(--accent);
+            box-shadow:
+            0 0 0 4px rgba(59,130,246,0.08);
+        }
+
+        .plan-card h3{
+            font-size:18px;
+            margin-bottom:8px;
+        }
+
+        .plan-card p{
+            font-size:13px;
+            color:var(--text-muted);
+            line-height:1.5;
+        }
+
+        .premium{
+            border-color:rgba(245,158,11,0.25);
+        }
+
+        .premium.active{
+            border-color:var(--premium);
+            box-shadow:
+            0 0 0 4px rgba(245,158,11,0.10);
+        }
+
+        .trial{
+            border-color:rgba(16,185,129,0.25);
+        }
+
+        .trial.active{
+            border-color:var(--trial);
+            box-shadow:
+            0 0 0 4px rgba(16,185,129,0.10);
+        }
+
+        .badge{
+            display:inline-block;
+            padding:6px 12px;
+            border-radius:999px;
+            font-size:12px;
+            margin-bottom:14px;
+            font-weight:700;
+        }
+
+        .badge-premium{
+            background:rgba(245,158,11,0.15);
+            color:#fbbf24;
+        }
+
+        .badge-trial{
+            background:rgba(16,185,129,0.15);
+            color:#34d399;
+        }
+
+        .register-btn{
+            width:100%;
+            padding:16px;
+            border:none;
+            border-radius:14px;
+            background:var(--primary);
+            color:var(--bg);
+            font-size:15px;
+            font-weight:700;
+            cursor:pointer;
+            transition:all .25s ease;
+            margin-top:10px;
+        }
+
+        .register-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:
+            0 15px 30px rgba(255,255,255,0.12);
+        }
+
+        .extra-links{
+            margin-top:26px;
+            text-align:center;
+            font-size:14px;
+            color:var(--text-muted);
+        }
+
+        .extra-links a{
+            color:var(--primary);
+            text-decoration:none;
+            font-weight:600;
+        }
+
+        .extra-links a:hover{
+            text-decoration:underline;
+        }
+
+        @keyframes fadeUp{
+            from{
+                opacity:0;
+                transform:translateY(20px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        @media(max-width:600px){
+
+            .register-card{
+                padding:34px 24px;
+            }
+
+            .logo h1{
+                font-size:34px;
+            }
+
+            .plan-container{
+                grid-template-columns:1fr;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-glow"></div>
+    <div class="bg-glow2"></div>
+
+    <div class="container">
+
+        <div class="register-card">
+
+            <div class="logo">
+                <h1>StudySmart</h1>
+                <p>Buat akun dan mulai belajar modern</p>
+            </div>
+
+            <form id="registerForm">
+
+                <div class="input-group">
+                    <label>Nama Lengkap</label>
+                    <input 
+                    type="text"
+                    id="nama"
+                    placeholder="Masukkan nama lengkap"
+                    required>
+                </div>
+
+                <div class="input-group">
+                    <label>Email</label>
+                    <input 
+                    type="email"
+                    id="email"
+                    placeholder="Masukkan email"
+                    required>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <input 
+                    type="password"
+                    id="password"
+                    placeholder="Masukkan password"
+                    required>
+                </div>
+
+                <div class="input-group">
+                    <label>Konfirmasi Password</label>
+                    <input 
+                    type="password"
+                    id="confirm"
+                    placeholder="Konfirmasi password"
+                    required>
+                </div>
+
+                <!-- PILIH PLAN -->
+                <div class="plan-title">
+                    Pilih Paket
+                </div>
+
+                <div class="plan-container">
+
+                    <!-- Trial -->
+                    <div class="plan-card trial active" onclick="selectPlan('Uji Coba', this)">
+                        
+                        <span class="badge badge-trial">
+                            FREE TRIAL
+                        </span>
+
+                        <h3>Uji Coba</h3>
+
+                        <p>
+                            Akses gratis selama 7 hari untuk mencoba seluruh fitur StudySmart.
+                        </p>
+
+                    </div>
+
+                    <!-- Premium -->
+                    <div class="plan-card premium" onclick="selectPlan('Premium', this)">
+                        
+                        <span class="badge badge-premium">
+                            PREMIUM
+                        </span>
+
+                        <h3>Premium</h3>
+
+                        <p>
+                            Unlock semua fitur premium, AI learning, dan deep analytics.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <input type="hidden" id="paket" value="Uji Coba">
+
+                <button type="submit" class="register-btn">
+                    Create Account
+                </button>
+
+            </form>
+
+            <div class="extra-links">
+                <p>
+                    Sudah punya akun?
+                    <a href="index.html">Login</a>
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+<script>
+
+function selectPlan(plan, element){
+
+    document.getElementById("paket").value = plan;
+
+    document.querySelectorAll(".plan-card")
+    .forEach(card => {
+        card.classList.remove("active");
+    });
+
+    element.classList.add("active");
+}
+
+document.getElementById("registerForm")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    let nama =
+    document.getElementById("nama").value;
+
+    let email =
+    document.getElementById("email").value;
+
+    let password =
+    document.getElementById("password").value;
+
+    let confirm =
+    document.getElementById("confirm").value;
+
+    let paket =
+    document.getElementById("paket").value;
+
+    if(password !== confirm){
+        alert("Password tidak sama!");
+        return;
+    }
+
+    localStorage.setItem("nama", nama);
+    localStorage.setItem("email", email);
+    localStorage.setItem("password", password);
+    localStorage.setItem("paket", paket);
+
+    alert(
+        "Register berhasil!\n\nPaket dipilih: " + paket
+    );
+
+    window.location.href = "index.html";
+
+});
+
+</script>
+
+</body>
+</html>

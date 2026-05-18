@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StudySmart - Deep Focus Session</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root{
+      --bg:#09090b;
+      --surface:#121214;
+      --surface2:#18181b;
+      --border:rgba(255,255,255,0.08);
+      --text:#f4f4f5;
+      --muted:#a1a1aa;
+      --accent:#3b82f6;
+      --gradient:linear-gradient(135deg,#3b82f6 0%, #8b5cf6 100%);
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Plus Jakarta Sans', sans-serif;
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    /* GRID BACKGROUND */
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+      background-image:
+      radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size:24px 24px;
+      z-index:-3;
+    }
+
+    /* GLOW */
+    .glow{
+      position:fixed;
+      width:700px;
+      height:350px;
+      background:
+      radial-gradient(circle,
+      rgba(59,130,246,0.18) 0%,
+      transparent 70%);
+      top:-120px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:-2;
+    }
+
+    .glow2{
+      position:fixed;
+      width:500px;
+      height:500px;
+      background:
+      radial-gradient(circle,
+      rgba(139,92,246,0.12) 0%,
+      transparent 70%);
+      bottom:-200px;
+      right:-120px;
+      z-index:-2;
+    }
+
+    /* NAVBAR */
+    header{
+      position:sticky;
+      top:0;
+      backdrop-filter:blur(16px);
+      background:rgba(9,9,11,0.75);
+      border-bottom:1px solid var(--border);
+      z-index:999;
+    }
+
+    .navbar{
+      max-width:1200px;
+      margin:auto;
+      padding:20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .logo{
+      font-size:22px;
+      font-weight:800;
+      color:white;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:28px;
+      list-style:none;
+    }
+
+    .nav-links a{
+      color:var(--muted);
+      text-decoration:none;
+      transition:.3s;
+      font-size:14px;
+    }
+
+    .nav-links a:hover{
+      color:white;
+    }
+
+    /* HERO */
+    .hero{
+      max-width:1200px;
+      margin:auto;
+      padding:110px 20px 70px;
+      text-align:center;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:28px;
+    }
+
+    .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#3b82f6;
+    }
+
+    .hero h1{
+      font-size:64px;
+      line-height:1.1;
+      margin-bottom:24px;
+      font-weight:800;
+      letter-spacing:-2px;
+
+      background:linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #9ca3af 100%);
+
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .hero p{
+      max-width:760px;
+      margin:auto;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.8;
+    }
+
+    /* MAIN SECTION */
+    .container{
+      max-width:1200px;
+      margin:auto;
+      padding:20px;
+    }
+
+    .focus-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:28px;
+    }
+
+    .card{
+      background:rgba(18,18,20,0.78);
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:30px;
+      backdrop-filter:blur(18px);
+      transition:.3s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-4px);
+      border-color:rgba(255,255,255,0.15);
+    }
+
+    .card h2{
+      font-size:28px;
+      margin-bottom:16px;
+    }
+
+    .card p{
+      color:var(--muted);
+      line-height:1.8;
+      margin-bottom:28px;
+      font-size:15px;
+    }
+
+    /* TIMER */
+    .timer-box{
+      text-align:center;
+      padding:30px;
+      border-radius:22px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+    }
+
+    .timer{
+      font-size:64px;
+      font-weight:800;
+      margin-bottom:20px;
+      letter-spacing:2px;
+    }
+
+    .timer-buttons{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .timer-buttons button{
+      padding:14px 24px;
+      border:none;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:700;
+      transition:.3s ease;
+      font-size:14px;
+    }
+
+    .start-btn{
+      background:white;
+      color:black;
+    }
+
+    .pause-btn{
+      background:rgba(255,255,255,0.08);
+      color:white;
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .reset-btn{
+      background:var(--gradient);
+      color:white;
+    }
+
+    .timer-buttons button:hover{
+      transform:translateY(-2px);
+    }
+
+    /* TASK LIST */
+    .task-list{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .task{
+      padding:18px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .task input{
+      width:20px;
+      height:20px;
+      accent-color:#3b82f6;
+    }
+
+    .task span{
+      color:var(--text);
+      font-size:15px;
+    }
+
+    /* MUSIC SECTION */
+    .music-card{
+      margin-top:28px;
+    }
+
+    .music-list{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .music-item{
+      padding:18px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      transition:.3s;
+      cursor:pointer;
+    }
+
+    .music-item:hover{
+      border-color:rgba(59,130,246,0.4);
+      transform:translateY(-2px);
+    }
+
+    .music-item h4{
+      margin-bottom:6px;
+    }
+
+    .music-item p{
+      margin:0;
+      font-size:13px;
+    }
+
+    /* FOOTER */
+    footer{
+      margin-top:90px;
+      padding:40px 20px;
+      text-align:center;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+
+      .hero h1{
+        font-size:42px;
+      }
+
+      .focus-grid{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+    @media(max-width:600px){
+
+      .hero{
+        padding-top:90px;
+      }
+
+      .hero h1{
+        font-size:34px;
+      }
+
+      .hero p{
+        font-size:15px;
+      }
+
+      .card{
+        padding:22px;
+      }
+
+      .timer{
+        font-size:48px;
+      }
+
+      .nav-links{
+        display:none;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="glow"></div>
+  <div class="glow2"></div>
+
+  <!-- HEADER -->
+  <header>
+
+    <nav class="navbar">
+
+      <div class="logo">
+        StudySmart
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#">Focus</a></li>
+        <li><a href="#">Productivity</a></li>
+      </ul>
+
+    </nav>
+
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="badge">
+      <div class="dot"></div>
+      Productivity Intelligence System
+    </div>
+
+    <h1>
+      Deep Focus Session
+    </h1>
+
+    <p>
+      Tingkatkan fokus belajar dan produktivitas dengan
+      sistem deep work modern, focus timer, task management,
+      dan ambient productivity environment.
+    </p>
+
+  </section>
+
+  <!-- MAIN -->
+  <main class="container">
+
+    <div class="focus-grid">
+
+      <!-- TIMER -->
+      <div class="card">
+
+        <h2>Focus Timer</h2>
+
+        <p>
+          Gunakan teknik deep work untuk menjaga konsentrasi
+          penuh selama sesi belajar berlangsung.
+        </p>
+
+        <div class="timer-box">
+
+          <div class="timer" id="timer">
+            25:00
+          </div>
+
+          <div class="timer-buttons">
+
+            <button class="start-btn" onclick="startTimer()">
+              Start
+            </button>
+
+            <button class="pause-btn" onclick="pauseTimer()">
+              Pause
+            </button>
+
+            <button class="reset-btn" onclick="resetTimer()">
+              Reset
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- TASK -->
+      <div class="card">
+
+        <h2>Today's Focus</h2>
+
+        <p>
+          Prioritaskan pekerjaan penting dan selesaikan
+          satu per satu tanpa distraksi.
+        </p>
+
+        <div class="task-list">
+
+          <div class="task">
+            <input type="checkbox">
+            <span>Menyelesaikan UI Dashboard</span>
+          </div>
+
+          <div class="task">
+            <input type="checkbox">
+            <span>Belajar Machine Learning</span>
+          </div>
+
+          <div class="task">
+            <input type="checkbox">
+            <span>Mengerjakan Project Frontend</span>
+          </div>
+
+          <div class="task">
+            <input type="checkbox">
+            <span>Review Materi AI</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- MUSIC -->
+    <div class="card music-card">
+
+      <h2>Focus Environment</h2>
+
+      <p>
+        Pilih suasana focus yang membantu meningkatkan
+        konsentrasi dan produktivitas belajar.
+      </p>
+
+      <div class="music-list">
+
+        <div class="music-item">
+          <h4>Deep Focus Ambient</h4>
+          <p>Low distraction ambient environment</p>
+        </div>
+
+        <div class="music-item">
+          <h4>Rain Productivity</h4>
+          <p>Rain sound untuk deep concentration</p>
+        </div>
+
+        <div class="music-item">
+          <h4>Lo-Fi Study Session</h4>
+          <p>Modern productivity music experience</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 StudySmart Inc. Deep Productivity System.
+  </footer>
+
+  <script>
+
+    let time = 1500;
+    let timerInterval;
+
+    function updateTimer(){
+
+      let minutes = Math.floor(time / 60);
+      let seconds = time % 60;
+
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      document.getElementById("timer").innerHTML =
+      `${minutes}:${seconds}`;
+
+    }
+
+    function startTimer(){
+
+      clearInterval(timerInterval);
+
+      timerInterval = setInterval(() => {
+
+        if(time > 0){
+
+          time--;
+
+          updateTimer();
+
+        } else {
+
+          clearInterval(timerInterval);
+
+          alert("Focus session selesai 🚀");
+
+        }
+
+      },1000);
+
+    }
+
+    function pauseTimer(){
+
+      clearInterval(timerInterval);
+
+    }
+
+    function resetTimer(){
+
+      clearInterval(timerInterval);
+
+      time = 1500;
+
+      updateTimer();
+
+    }
+
+    updateTimer();
+
+  </script>
+
+</body>
+</html>

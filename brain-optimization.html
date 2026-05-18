@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Brain Optimization - StudySmart</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root{
+      --bg:#05060a;
+      --card:#0f1117;
+      --surface:#151821;
+      --border:rgba(255,255,255,0.08);
+      --text:#f4f4f5;
+      --muted:#8b8b97;
+      --blue:#3b82f6;
+      --purple:#8b5cf6;
+      --green:#22c55e;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Plus Jakarta Sans', sans-serif;
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+      padding:40px 20px;
+      position:relative;
+    }
+
+    /* Background */
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+      background-image:
+      radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size:24px 24px;
+      z-index:-3;
+    }
+
+    .glow{
+      position:fixed;
+      width:700px;
+      height:350px;
+      background:
+      radial-gradient(circle,
+      rgba(59,130,246,0.18) 0%,
+      transparent 70%);
+      top:-100px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:-2;
+    }
+
+    .glow2{
+      position:fixed;
+      width:500px;
+      height:500px;
+      background:
+      radial-gradient(circle,
+      rgba(139,92,246,0.12) 0%,
+      transparent 70%);
+      bottom:-200px;
+      right:-120px;
+      z-index:-2;
+    }
+
+    /* Container */
+    .container{
+      max-width:1200px;
+      margin:auto;
+    }
+
+    /* Hero */
+    .hero-card{
+      background:linear-gradient(
+      180deg,
+      rgba(15,17,23,0.96) 0%,
+      rgba(10,12,18,0.98) 100%);
+      border:1px solid var(--border);
+      border-radius:34px;
+      padding:42px;
+      margin-bottom:28px;
+      position:relative;
+      overflow:hidden;
+      box-shadow:
+      0 30px 80px rgba(0,0,0,0.55);
+      animation:fadeUp .8s ease;
+    }
+
+    .hero-card::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      border-radius:34px;
+      padding:1px;
+      background:linear-gradient(
+      180deg,
+      rgba(255,255,255,0.10),
+      rgba(255,255,255,0.02));
+      -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(59,130,246,0.08);
+      border:1px solid rgba(59,130,246,0.18);
+      color:#93c5fd;
+      font-size:13px;
+      margin-bottom:24px;
+    }
+
+    .badge-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#3b82f6;
+    }
+
+    .hero-card h1{
+      font-size:62px;
+      line-height:1.05;
+      letter-spacing:-2px;
+      margin-bottom:22px;
+      font-weight:800;
+      max-width:700px;
+    }
+
+    .hero-card p{
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.9;
+      max-width:720px;
+    }
+
+    /* Dashboard */
+    .dashboard{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:24px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:28px;
+    }
+
+    .card h3{
+      font-size:24px;
+      margin-bottom:22px;
+    }
+
+    /* Focus */
+    .focus-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    .focus-box{
+      background:var(--surface);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:22px;
+      padding:24px;
+      transition:.3s ease;
+    }
+
+    .focus-box:hover{
+      transform:translateY(-4px);
+      border-color:rgba(59,130,246,0.3);
+    }
+
+    .focus-box span{
+      color:var(--muted);
+      font-size:14px;
+      display:block;
+      margin-bottom:10px;
+    }
+
+    .focus-box h2{
+      font-size:38px;
+      margin-bottom:10px;
+    }
+
+    .focus-box p{
+      color:#d4d4d8;
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    /* Brain Activity */
+    .activity-list{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .activity-item{
+      background:var(--surface);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:20px;
+      padding:22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+    }
+
+    .activity-left h4{
+      margin-bottom:8px;
+      font-size:18px;
+    }
+
+    .activity-left p{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    .status{
+      padding:10px 16px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      flex-shrink:0;
+    }
+
+    .high{
+      background:rgba(34,197,94,0.10);
+      color:#4ade80;
+    }
+
+    .medium{
+      background:rgba(59,130,246,0.10);
+      color:#60a5fa;
+    }
+
+    .low{
+      background:rgba(139,92,246,0.10);
+      color:#c084fc;
+    }
+
+    /* Quote */
+    .quote-card{
+      margin-top:24px;
+      background:linear-gradient(
+      135deg,
+      rgba(59,130,246,0.08),
+      rgba(139,92,246,0.08));
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:28px;
+      padding:30px;
+    }
+
+    .quote-card p{
+      color:#e4e4e7;
+      line-height:2;
+      font-size:17px;
+    }
+
+    /* Button */
+    .optimize-btn{
+      margin-top:26px;
+      padding:16px 28px;
+      border:none;
+      border-radius:16px;
+      background:white;
+      color:black;
+      font-weight:700;
+      font-size:15px;
+      cursor:pointer;
+      transition:.3s ease;
+    }
+
+    .optimize-btn:hover{
+      transform:translateY(-3px);
+      box-shadow:
+      0 20px 40px rgba(255,255,255,0.10);
+    }
+
+    /* Footer */
+    .footer{
+      text-align:center;
+      margin-top:40px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    /* Animation */
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media(max-width:900px){
+
+      .dashboard{
+        grid-template-columns:1fr;
+      }
+
+      .hero-card h1{
+        font-size:44px;
+      }
+
+    }
+
+    @media(max-width:600px){
+
+      body{
+        padding:20px 14px;
+      }
+
+      .hero-card{
+        padding:30px 22px;
+      }
+
+      .hero-card h1{
+        font-size:34px;
+      }
+
+      .hero-card p{
+        font-size:16px;
+      }
+
+      .focus-grid{
+        grid-template-columns:1fr;
+      }
+
+      .activity-item{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="glow"></div>
+  <div class="glow2"></div>
+
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="hero-card">
+
+      <div class="badge">
+        <div class="badge-dot"></div>
+        Neural Productivity System
+      </div>
+
+      <h1>
+        Brain Optimization
+      </h1>
+
+      <p>
+        Tingkatkan fokus, produktivitas, dan performa belajar
+        menggunakan sistem optimasi otak berbasis deep work,
+        cognitive energy management, dan intelligent habit tracking.
+      </p>
+
+      <button class="optimize-btn" onclick="startOptimization()">
+        Start Optimization
+      </button>
+
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard">
+
+      <!-- Left -->
+      <div class="card">
+
+        <h3>Brain Performance</h3>
+
+        <div class="focus-grid">
+
+          <div class="focus-box">
+            <span>Focus Level</span>
+            <h2 id="focusValue">92%</h2>
+            <p>
+              Tingkat fokus harian berada pada performa optimal.
+            </p>
+          </div>
+
+          <div class="focus-box">
+            <span>Energy Balance</span>
+            <h2>87%</h2>
+            <p>
+              Stabilitas energi mental dan konsentrasi sangat baik.
+            </p>
+          </div>
+
+          <div class="focus-box">
+            <span>Memory Retention</span>
+            <h2>90%</h2>
+            <p>
+              Kemampuan menyimpan dan memahami materi meningkat.
+            </p>
+          </div>
+
+          <div class="focus-box">
+            <span>Deep Work Time</span>
+            <h2>4.2h</h2>
+            <p>
+              Total waktu fokus tanpa distraksi hari ini.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Right -->
+      <div class="card">
+
+        <h3>Optimization Activities</h3>
+
+        <div class="activity-list">
+
+          <div class="activity-item">
+
+            <div class="activity-left">
+              <h4>Morning Deep Focus</h4>
+
+              <p>
+                Sesi fokus tinggi untuk meningkatkan produktivitas belajar.
+              </p>
+            </div>
+
+            <div class="status high">
+              High
+            </div>
+
+          </div>
+
+          <div class="activity-item">
+
+            <div class="activity-left">
+              <h4>Digital Detox</h4>
+
+              <p>
+                Mengurangi distraksi media sosial dan notifikasi.
+              </p>
+            </div>
+
+            <div class="status medium">
+              Medium
+            </div>
+
+          </div>
+
+          <div class="activity-item">
+
+            <div class="activity-left">
+              <h4>Sleep Recovery</h4>
+
+              <p>
+                Optimasi kualitas tidur untuk meningkatkan cognitive performance.
+              </p>
+            </div>
+
+            <div class="status high">
+              High
+            </div>
+
+          </div>
+
+          <div class="activity-item">
+
+            <div class="activity-left">
+              <h4>Brain Exercise</h4>
+
+              <p>
+                Aktivitas melatih fokus, memori, dan problem solving.
+              </p>
+            </div>
+
+            <div class="status low">
+              Active
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Quote -->
+    <div class="quote-card">
+
+      <p>
+        “Otak yang terlatih dengan fokus dan disiplin
+        akan menghasilkan performa belajar yang luar biasa.”
+      </p>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      StudySmart Brain Intelligence System © 2026
+    </div>
+
+  </div>
+
+  <script>
+
+    function startOptimization(){
+
+      alert(
+        "Brain Optimization Activated 🚀\n\n" +
+        "Focus mode dan productivity system berhasil dijalankan."
+      );
+
+    }
+
+    // Dynamic focus effect
+    let focus = 92;
+
+    setInterval(() => {
+
+      const random =
+      Math.floor(Math.random() * 4) - 1;
+
+      focus += random;
+
+      if(focus > 98){
+        focus = 98;
+      }
+
+      if(focus < 85){
+        focus = 85;
+      }
+
+      document.getElementById("focusValue").innerText =
+      focus + "%";
+
+    }, 3000);
+
+  </script>
+
+</body>
+</html>

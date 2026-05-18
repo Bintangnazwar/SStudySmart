@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Morning Planning - StudySmart</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root{
+      --bg:#05060a;
+      --card:#0d0f14;
+      --surface:#11131a;
+      --border:rgba(255,255,255,0.08);
+      --text:#f4f4f5;
+      --muted:#8b8b97;
+      --blue:#3b82f6;
+      --green:#22c55e;
+      --red:#ef4444;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Plus Jakarta Sans', sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      background:var(--bg);
+      position:relative;
+      overflow-x:hidden;
+      color:var(--text);
+      padding:40px 20px;
+    }
+
+    /* Background */
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+      background-image:
+      radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size:24px 24px;
+      z-index:-3;
+    }
+
+    .glow{
+      position:fixed;
+      width:700px;
+      height:350px;
+      background:
+      radial-gradient(circle,
+      rgba(59,130,246,0.18) 0%,
+      transparent 70%);
+      top:-120px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:-2;
+    }
+
+    /* Container */
+    .container{
+      width:100%;
+      max-width:1100px;
+      margin:auto;
+    }
+
+    /* Header Card */
+    .planning-card{
+      background:linear-gradient(
+      180deg,
+      rgba(13,15,20,0.96) 0%,
+      rgba(10,12,18,0.98) 100%);
+      border:1px solid var(--border);
+      border-radius:34px;
+      padding:42px;
+      box-shadow:
+      0 30px 80px rgba(0,0,0,0.55);
+      position:relative;
+      overflow:hidden;
+      margin-bottom:30px;
+      animation:fadeUp .8s ease;
+    }
+
+    .planning-card::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      border-radius:34px;
+      padding:1px;
+      background:linear-gradient(
+      180deg,
+      rgba(255,255,255,0.10),
+      rgba(255,255,255,0.02));
+      -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+      pointer-events:none;
+    }
+
+    .top-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .time-box{
+      width:110px;
+      height:110px;
+      border-radius:28px;
+      background:rgba(59,130,246,0.08);
+      border:1px solid rgba(59,130,246,0.28);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      position:relative;
+      overflow:hidden;
+      flex-shrink:0;
+    }
+
+    .time-box::after{
+      content:'';
+      position:absolute;
+      width:140px;
+      height:140px;
+      background:
+      radial-gradient(circle,
+      rgba(59,130,246,0.18),
+      transparent 70%);
+    }
+
+    .time-box h2{
+      font-size:38px;
+      color:#60a5fa;
+      font-weight:800;
+      position:relative;
+      z-index:1;
+    }
+
+    .planning-content{
+      flex:1;
+    }
+
+    .planning-content h1{
+      font-size:52px;
+      line-height:1.1;
+      font-weight:800;
+      letter-spacing:-2px;
+      margin-bottom:18px;
+    }
+
+    .planning-content p{
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.9;
+      max-width:650px;
+    }
+
+    /* Dashboard */
+    .dashboard{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:24px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:28px;
+    }
+
+    .card h3{
+      font-size:22px;
+      margin-bottom:22px;
+    }
+
+    /* Input */
+    .task-input{
+      display:flex;
+      gap:12px;
+      margin-bottom:22px;
+    }
+
+    .task-input input{
+      flex:1;
+      padding:16px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.03);
+      color:white;
+      outline:none;
+      font-size:14px;
+    }
+
+    .task-input button{
+      padding:16px 22px;
+      border:none;
+      border-radius:14px;
+      background:white;
+      color:black;
+      font-weight:700;
+      cursor:pointer;
+      transition:.3s;
+    }
+
+    .task-input button:hover{
+      transform:translateY(-2px);
+    }
+
+    /* Task List */
+    .task-list{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .task-item{
+      background:var(--surface);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:18px;
+      padding:18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      animation:fadeUp .4s ease;
+    }
+
+    .task-left{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .task-left input{
+      width:18px;
+      height:18px;
+      accent-color:#3b82f6;
+      cursor:pointer;
+    }
+
+    .task-text{
+      font-size:15px;
+      line-height:1.6;
+    }
+
+    .completed{
+      text-decoration:line-through;
+      color:var(--muted);
+    }
+
+    .delete-btn{
+      background:rgba(239,68,68,0.12);
+      color:#f87171;
+      border:none;
+      padding:10px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:600;
+    }
+
+    /* Stats */
+    .stats{
+      display:grid;
+      gap:18px;
+    }
+
+    .stat-box{
+      background:var(--surface);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:22px;
+      padding:24px;
+    }
+
+    .stat-box span{
+      color:var(--muted);
+      font-size:14px;
+      display:block;
+      margin-bottom:12px;
+    }
+
+    .stat-box h2{
+      font-size:36px;
+    }
+
+    /* Quote */
+    .quote{
+      margin-top:20px;
+      background:linear-gradient(
+      135deg,
+      rgba(59,130,246,0.10),
+      rgba(139,92,246,0.10));
+      border:1px solid rgba(59,130,246,0.15);
+      border-radius:22px;
+      padding:24px;
+    }
+
+    .quote p{
+      line-height:1.8;
+      color:#d4d4d8;
+      font-size:15px;
+    }
+
+    /* Footer */
+    .footer-text{
+      text-align:center;
+      margin-top:40px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    /* Animation */
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media(max-width:900px){
+
+      .dashboard{
+        grid-template-columns:1fr;
+      }
+
+      .planning-content h1{
+        font-size:40px;
+      }
+
+    }
+
+    @media(max-width:600px){
+
+      body{
+        padding:20px 14px;
+      }
+
+      .planning-card{
+        padding:28px 22px;
+        border-radius:28px;
+      }
+
+      .top-header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .time-box{
+        width:90px;
+        height:90px;
+      }
+
+      .time-box h2{
+        font-size:30px;
+      }
+
+      .planning-content h1{
+        font-size:32px;
+      }
+
+      .planning-content p{
+        font-size:16px;
+      }
+
+      .task-input{
+        flex-direction:column;
+      }
+
+      .task-input button{
+        width:100%;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="glow"></div>
+
+  <div class="container">
+
+    <!-- Header -->
+    <div class="planning-card">
+
+      <div class="top-header">
+
+        <div class="time-box">
+          <h2 id="clock">07:00</h2>
+        </div>
+
+        <div class="planning-content">
+
+          <h1>
+            Morning Planning
+          </h1>
+
+          <p>
+            Susun target belajar harian, prioritas utama,
+            dan fokus produktivitas sebelum memulai aktivitas akademik.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard">
+
+      <!-- Left -->
+      <div class="card">
+
+        <h3>Today's Priority Tasks</h3>
+
+        <div class="task-input">
+
+          <input 
+            type="text"
+            id="taskInput"
+            placeholder="Tambahkan target belajar atau tugas..."
+          >
+
+          <button onclick="addTask()">
+            Add Task
+          </button>
+
+        </div>
+
+        <div class="task-list" id="taskList">
+
+        </div>
+
+      </div>
+
+      <!-- Right -->
+      <div class="stats">
+
+        <div class="card">
+
+          <h3>Daily Progress</h3>
+
+          <div class="stat-box">
+            <span>Total Tasks</span>
+            <h2 id="totalTask">0</h2>
+          </div>
+
+          <div class="stat-box">
+            <span>Completed</span>
+            <h2 id="completedTask">0</h2>
+          </div>
+
+          <div class="stat-box">
+            <span>Focus Rate</span>
+            <h2 id="focusRate">0%</h2>
+          </div>
+
+        </div>
+
+        <div class="quote">
+
+          <p>
+            “Produktivitas bukan tentang bekerja lebih keras,
+            tetapi tentang fokus pada hal yang benar.”
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-text">
+      StudySmart Productivity System © 2026
+    </div>
+
+  </div>
+
+  <script>
+
+    const taskInput = document.getElementById("taskInput");
+    const taskList = document.getElementById("taskList");
+
+    let total = 0;
+    let completed = 0;
+
+    function updateStats(){
+
+      document.getElementById("totalTask").innerText = total;
+
+      document.getElementById("completedTask").innerText = completed;
+
+      let percent = total === 0
+      ? 0
+      : Math.round((completed / total) * 100);
+
+      document.getElementById("focusRate").innerText =
+      percent + "%";
+
+    }
+
+    function addTask(){
+
+      const taskText = taskInput.value.trim();
+
+      if(taskText === ""){
+        alert("Masukkan task terlebih dahulu");
+        return;
+      }
+
+      total++;
+
+      const taskItem = document.createElement("div");
+      taskItem.classList.add("task-item");
+
+      taskItem.innerHTML = `
+      
+        <div class="task-left">
+
+          <input type="checkbox">
+
+          <div class="task-text">
+            ${taskText}
+          </div>
+
+        </div>
+
+        <button class="delete-btn">
+          Delete
+        </button>
+
+      `;
+
+      const checkbox =
+      taskItem.querySelector("input");
+
+      const taskTextElement =
+      taskItem.querySelector(".task-text");
+
+      checkbox.addEventListener("change", function(){
+
+        if(this.checked){
+
+          completed++;
+          taskTextElement.classList.add("completed");
+
+        } else {
+
+          completed--;
+          taskTextElement.classList.remove("completed");
+
+        }
+
+        updateStats();
+
+      });
+
+      taskItem.querySelector(".delete-btn")
+      .addEventListener("click", function(){
+
+        if(checkbox.checked){
+          completed--;
+        }
+
+        total--;
+
+        taskItem.remove();
+
+        updateStats();
+
+      });
+
+      taskList.appendChild(taskItem);
+
+      taskInput.value = "";
+
+      updateStats();
+
+    }
+
+    /* Enter Keyboard */
+    taskInput.addEventListener("keypress", function(e){
+
+      if(e.key === "Enter"){
+
+        addTask();
+
+      }
+
+    });
+
+    /* Real Time Clock */
+    function updateClock(){
+
+      const now = new Date();
+
+      let hours =
+      String(now.getHours()).padStart(2,"0");
+
+      let minutes =
+      String(now.getMinutes()).padStart(2,"0");
+
+      document.getElementById("clock").innerText =
+      `${hours}:${minutes}`;
+
+    }
+
+    setInterval(updateClock, 1000);
+
+    updateClock();
+
+  </script>
+
+</body>
+</html>

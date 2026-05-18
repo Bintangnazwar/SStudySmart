@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudySmart Login</title>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root{
+            --bg:#09090b;
+            --surface:#121214;
+            --surface2:#18181b;
+            --border:rgba(255,255,255,0.08);
+            --text:#f4f4f5;
+            --muted:#a1a1aa;
+            --accent:#3b82f6;
+            --gradient:linear-gradient(135deg,#3b82f6 0%, #8b5cf6 100%);
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Plus Jakarta Sans', sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            background:var(--bg);
+            overflow-y:auto;
+            position:relative;
+            color:var(--text);
+            padding:40px 20px;
+            display:flex;
+            justify-content:center;
+            align-items:flex-start;
+        }
+
+        /* Background Grid */
+        body::before{
+            content:'';
+            position:fixed;
+            inset:0;
+            background-image:
+            radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size:24px 24px;
+            z-index:-3;
+        }
+
+        /* Glow */
+        .glow{
+            position:fixed;
+            width:700px;
+            height:350px;
+            background:
+            radial-gradient(circle,
+            rgba(59,130,246,0.25) 0%,
+            transparent 70%);
+            top:-100px;
+            left:50%;
+            transform:translateX(-50%);
+            z-index:-2;
+        }
+
+        .glow2{
+            position:fixed;
+            width:500px;
+            height:500px;
+            background:
+            radial-gradient(circle,
+            rgba(139,92,246,0.15) 0%,
+            transparent 70%);
+            bottom:-200px;
+            right:-120px;
+            z-index:-2;
+        }
+
+        /* Container */
+        .container{
+            width:100%;
+            max-width:480px;
+            position:relative;
+            z-index:2;
+        }
+
+        /* Login Card */
+        .login-card{
+            width:100%;
+            background:rgba(18,18,20,0.78);
+            backdrop-filter:blur(20px);
+            border:1px solid var(--border);
+            border-radius:28px;
+            padding:42px 34px;
+            box-shadow:
+            0 30px 80px rgba(0,0,0,0.45);
+            animation:fadeUp .8s ease;
+        }
+
+        /* Logo */
+        .logo{
+            text-align:center;
+            margin-bottom:32px;
+        }
+
+        .badge{
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:10px 14px;
+            border-radius:999px;
+            background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.06);
+            margin-bottom:24px;
+            font-size:13px;
+            color:var(--muted);
+        }
+
+        .dot{
+            width:8px;
+            height:8px;
+            border-radius:50%;
+            background:#3b82f6;
+        }
+
+        .logo h1{
+            font-size:40px;
+            font-weight:800;
+            letter-spacing:-1px;
+            background:linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #9ca3af 100%);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            margin-bottom:10px;
+        }
+
+        .logo p{
+            color:var(--muted);
+            font-size:15px;
+            line-height:1.6;
+        }
+
+        /* Plan Section */
+        .plan-info{
+            background:rgba(255,255,255,0.03);
+            border:1px solid rgba(255,255,255,0.08);
+            border-radius:18px;
+            padding:18px;
+            margin-bottom:28px;
+        }
+
+        .plan-title{
+            font-size:14px;
+            font-weight:700;
+            margin-bottom:14px;
+        }
+
+        .plan-box{
+            display:flex;
+            gap:12px;
+        }
+
+        .plan{
+            flex:1;
+            background:rgba(255,255,255,0.03);
+            border:1px solid rgba(255,255,255,0.06);
+            border-radius:14px;
+            padding:14px;
+            transition:.3s ease;
+        }
+
+        .plan.active{
+            border:1px solid rgba(59,130,246,0.5);
+            background:rgba(59,130,246,0.08);
+        }
+
+        .plan h3{
+            font-size:14px;
+            margin-bottom:6px;
+        }
+
+        .plan span{
+            font-size:12px;
+            color:var(--muted);
+            line-height:1.5;
+            display:block;
+        }
+
+        /* Inputs */
+        .input-group{
+            margin-bottom:22px;
+        }
+
+        .input-group label{
+            display:block;
+            margin-bottom:10px;
+            font-size:14px;
+            color:var(--text);
+            font-weight:600;
+        }
+
+        .input-group input{
+            width:100%;
+            padding:16px;
+            border-radius:14px;
+            border:1px solid rgba(255,255,255,0.08);
+            background:rgba(255,255,255,0.03);
+            color:white;
+            outline:none;
+            font-size:14px;
+            transition:all .3s ease;
+        }
+
+        .input-group input:focus{
+            border-color:rgba(59,130,246,0.5);
+            background:rgba(255,255,255,0.05);
+            box-shadow:
+            0 0 0 4px rgba(59,130,246,0.15);
+        }
+
+        .input-group input::placeholder{
+            color:#71717a;
+        }
+
+        /* Button */
+        .login-btn{
+            width:100%;
+            padding:16px;
+            border:none;
+            border-radius:16px;
+            background:var(--gradient);
+            color:white;
+            font-weight:700;
+            font-size:15px;
+            cursor:pointer;
+            transition:all .3s ease;
+            margin-top:10px;
+        }
+
+        .login-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:
+            0 12px 30px rgba(59,130,246,0.35);
+        }
+
+        /* Footer */
+        .extra-links{
+            margin-top:28px;
+            text-align:center;
+            color:var(--muted);
+            font-size:14px;
+            line-height:1.7;
+        }
+
+        .extra-links a{
+            color:white;
+            text-decoration:none;
+            font-weight:600;
+        }
+
+        .extra-links a:hover{
+            text-decoration:underline;
+        }
+
+        /* Animation */
+        @keyframes fadeUp{
+            from{
+                opacity:0;
+                transform:translateY(20px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media(max-width:520px){
+
+            body{
+                padding:20px 14px;
+            }
+
+            .container{
+                max-width:100%;
+            }
+
+            .login-card{
+                padding:30px 22px;
+                border-radius:24px;
+            }
+
+            .logo h1{
+                font-size:32px;
+            }
+
+            .plan-box{
+                flex-direction:column;
+            }
+
+            .badge{
+                font-size:12px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="glow"></div>
+<div class="glow2"></div>
+
+<div class="container">
+
+    <div class="login-card">
+
+        <!-- Logo -->
+        <div class="logo">
+
+            <div class="badge">
+                <div class="dot"></div>
+                Intelligent Learning Ecosystem
+            </div>
+
+            <h1>StudySmart</h1>
+
+            <p>
+                Login untuk melanjutkan akses ke akun Premium atau Free Trial kamu
+            </p>
+
+        </div>
+
+        <!-- PLAN INFO -->
+        <div class="plan-info">
+
+            <div class="plan-title">
+                Status Akun Tersedia
+            </div>
+
+            <div class="plan-box">
+
+                <div class="plan active">
+                    <h3>Premium</h3>
+                    <span>
+                        Full akses seluruh fitur dan AI productivity engine
+                    </span>
+                </div>
+
+                <div class="plan">
+                    <h3>Free Trial</h3>
+                    <span>
+                        Akses gratis selama 7 hari untuk pengguna baru
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FORM -->
+        <form id="loginForm">
+
+            <div class="input-group">
+
+                <label>Email</label>
+
+                <input 
+                    type="email" 
+                    id="email" 
+                    placeholder="Masukkan email"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label>Password</label>
+
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="Masukkan password"
+                    required
+                >
+
+            </div>
+
+            <button type="submit" class="login-btn">
+                Login 
+            </button>
+
+        </form>
+
+        <!-- Footer -->
+        <div class="extra-links">
+
+            <p>
+                Belum punya akun?
+                <a href="register.html">Register</a>
+            </p>
+
+            <p style="margin-top:8px;">
+                Trial dan Premium dapat digunakan setelah registrasi
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.getElementById("loginForm")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    let email =
+    document.getElementById("email").value;
+
+    let password =
+    document.getElementById("password").value;
+
+    let savedEmail =
+    localStorage.getItem("email");
+
+    let savedPassword =
+    localStorage.getItem("password");
+
+    let userPlan =
+    localStorage.getItem("plan");
+
+    if(email === savedEmail && password === savedPassword){
+
+        if(userPlan === "premium"){
+
+            alert("Login berhasil 🚀\nSelamat datang kembali Premium User");
+
+        } else {
+
+            alert("Login berhasil 🚀\nSelamat datang kembali Trial User");
+
+        }
+
+        window.location.href = "Home.html";
+
+    } else {
+
+        alert("Email atau password salah!");
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

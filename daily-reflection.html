@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>StudySmart - Daily Reflection</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root{
+      --bg:#09090b;
+      --surface:#121214;
+      --surface2:#18181b;
+      --border:rgba(255,255,255,0.08);
+      --text:#f4f4f5;
+      --muted:#a1a1aa;
+      --accent:#3b82f6;
+      --gradient:linear-gradient(135deg,#3b82f6 0%, #8b5cf6 100%);
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Plus Jakarta Sans', sans-serif;
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    /* GRID */
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+      background-image:
+      radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size:24px 24px;
+      z-index:-3;
+    }
+
+    /* GLOW */
+    .glow{
+      position:fixed;
+      width:700px;
+      height:350px;
+      background:
+      radial-gradient(circle,
+      rgba(59,130,246,0.18) 0%,
+      transparent 70%);
+      top:-120px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:-2;
+    }
+
+    .glow2{
+      position:fixed;
+      width:500px;
+      height:500px;
+      background:
+      radial-gradient(circle,
+      rgba(139,92,246,0.12) 0%,
+      transparent 70%);
+      bottom:-200px;
+      right:-120px;
+      z-index:-2;
+    }
+
+    /* HEADER */
+    header{
+      position:sticky;
+      top:0;
+      backdrop-filter:blur(16px);
+      background:rgba(9,9,11,0.78);
+      border-bottom:1px solid var(--border);
+      z-index:999;
+    }
+
+    .navbar{
+      max-width:1200px;
+      margin:auto;
+      padding:20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .logo{
+      font-size:22px;
+      font-weight:800;
+      color:white;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:28px;
+      list-style:none;
+    }
+
+    .nav-links a{
+      color:var(--muted);
+      text-decoration:none;
+      transition:.3s;
+      font-size:14px;
+    }
+
+    .nav-links a:hover{
+      color:white;
+    }
+
+    /* HERO */
+    .hero{
+      max-width:1100px;
+      margin:auto;
+      padding:100px 20px 70px;
+      text-align:center;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:28px;
+    }
+
+    .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#3b82f6;
+    }
+
+    .hero h1{
+      font-size:64px;
+      line-height:1.1;
+      margin-bottom:24px;
+      font-weight:800;
+      letter-spacing:-2px;
+
+      background:linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #9ca3af 100%);
+
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .hero p{
+      max-width:760px;
+      margin:auto;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.8;
+    }
+
+    /* MAIN */
+    .container{
+      max-width:1100px;
+      margin:auto;
+      padding:20px;
+    }
+
+    .reflection-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:28px;
+    }
+
+    .card{
+      background:rgba(18,18,20,0.78);
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:30px;
+      backdrop-filter:blur(18px);
+      transition:.3s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-4px);
+      border-color:rgba(255,255,255,0.15);
+    }
+
+    .card h2{
+      font-size:28px;
+      margin-bottom:16px;
+    }
+
+    .card p{
+      color:var(--muted);
+      line-height:1.8;
+      margin-bottom:24px;
+      font-size:15px;
+    }
+
+    textarea{
+      width:100%;
+      min-height:180px;
+      resize:none;
+      border:none;
+      outline:none;
+      border-radius:18px;
+      padding:18px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.08);
+      color:white;
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    textarea::placeholder{
+      color:#71717a;
+    }
+
+    .save-btn{
+      margin-top:20px;
+      width:100%;
+      padding:16px;
+      border:none;
+      border-radius:16px;
+      background:white;
+      color:black;
+      font-weight:700;
+      cursor:pointer;
+      transition:.3s ease;
+      font-size:15px;
+    }
+
+    .save-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 15px 30px rgba(255,255,255,0.12);
+    }
+
+    /* MOOD */
+    .mood-wrapper{
+      display:flex;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .mood{
+      flex:1;
+      min-width:100px;
+      padding:18px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      text-align:center;
+      cursor:pointer;
+      transition:.3s ease;
+    }
+
+    .mood:hover{
+      border-color:rgba(59,130,246,0.4);
+      transform:translateY(-3px);
+    }
+
+    .mood.active{
+      background:rgba(59,130,246,0.12);
+      border-color:rgba(59,130,246,0.4);
+    }
+
+    .mood span{
+      display:block;
+      margin-top:8px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* SUMMARY */
+    .summary{
+      margin-top:28px;
+    }
+
+    .summary-box{
+      margin-top:18px;
+      padding:20px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      line-height:1.8;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    /* FOOTER */
+    footer{
+      margin-top:90px;
+      padding:40px 20px;
+      text-align:center;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+
+      .hero h1{
+        font-size:42px;
+      }
+
+      .reflection-grid{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+    @media(max-width:600px){
+
+      .hero{
+        padding-top:90px;
+      }
+
+      .hero h1{
+        font-size:34px;
+      }
+
+      .hero p{
+        font-size:15px;
+      }
+
+      .card{
+        padding:22px;
+      }
+
+      .nav-links{
+        display:none;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="glow"></div>
+  <div class="glow2"></div>
+
+  <!-- HEADER -->
+  <header>
+
+    <nav class="navbar">
+
+      <div class="logo">
+        StudySmart
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#">Reflection</a></li>
+        <li><a href="#">Productivity</a></li>
+      </ul>
+
+    </nav>
+
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="badge">
+      <div class="dot"></div>
+      Self Improvement System
+    </div>
+
+    <h1>
+      Daily Reflection
+    </h1>
+
+    <p>
+      Evaluasi perkembangan harian, catat pembelajaran penting,
+      dan bangun kebiasaan produktif untuk meningkatkan
+      fokus serta kualitas diri setiap hari.
+    </p>
+
+  </section>
+
+  <!-- MAIN -->
+  <main class="container">
+
+    <div class="reflection-grid">
+
+      <!-- REFLECTION -->
+      <div class="card">
+
+        <h2>Today's Reflection</h2>
+
+        <p>
+          Tuliskan pengalaman, pembelajaran, dan progress
+          yang kamu dapatkan hari ini.
+        </p>
+
+        <textarea
+        id="reflectionText"
+        placeholder="Apa hal terbaik yang kamu pelajari hari ini?"></textarea>
+
+        <button class="save-btn" onclick="saveReflection()">
+          Save Reflection
+        </button>
+
+      </div>
+
+      <!-- MOOD -->
+      <div class="card">
+
+        <h2>Daily Mood</h2>
+
+        <p>
+          Pilih suasana hati kamu hari ini untuk membantu
+          tracking produktivitas dan mental performance.
+        </p>
+
+        <div class="mood-wrapper">
+
+          <div class="mood" onclick="selectMood(this)">
+            😀
+            <span>Happy</span>
+          </div>
+
+          <div class="mood" onclick="selectMood(this)">
+            😌
+            <span>Calm</span>
+          </div>
+
+          <div class="mood" onclick="selectMood(this)">
+            😴
+            <span>Tired</span>
+          </div>
+
+          <div class="mood" onclick="selectMood(this)">
+            😎
+            <span>Focused</span>
+          </div>
+
+        </div>
+
+        <div class="summary">
+
+          <h2 style="font-size:22px; margin-top:34px;">
+            Productivity Insight
+          </h2>
+
+          <div class="summary-box">
+
+            Konsistensi reflection harian membantu meningkatkan
+            self awareness, produktivitas, dan kualitas belajar
+            secara bertahap melalui evaluasi diri yang terukur.
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 StudySmart Inc. Personal Growth System.
+  </footer>
+
+  <script>
+
+    function saveReflection(){
+
+      const text =
+      document.getElementById("reflectionText").value;
+
+      if(text.trim() === ""){
+
+        alert("Tulis reflection terlebih dahulu.");
+
+        return;
+      }
+
+      localStorage.setItem("dailyReflection", text);
+
+      alert("Reflection berhasil disimpan 🚀");
+
+    }
+
+    window.onload = function(){
+
+      const savedReflection =
+      localStorage.getItem("dailyReflection");
+
+      if(savedReflection){
+
+        document.getElementById("reflectionText").value =
+        savedReflection;
+
+      }
+
+    }
+
+    function selectMood(element){
+
+      const moods =
+      document.querySelectorAll(".mood");
+
+      moods.forEach(mood => {
+        mood.classList.remove("active");
+      });
+
+      element.classList.add("active");
+
+      localStorage.setItem(
+        "dailyMood",
+        element.innerText
+      );
+
+    }
+
+  </script>
+
+</body>
+</html>
